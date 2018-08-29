@@ -52,7 +52,7 @@ public class ChatGUI extends JPanel {
 		 *  init components
 		 */
 		// messages display
-		chatArea = new JTextArea(30, 50);
+		chatArea = new JTextArea(30, 60);
 		chatArea.setLineWrap(true);
 		chatArea.setFont(new Font("Consolas", 0, 15));
 		chatArea.setEditable(false);
@@ -64,7 +64,7 @@ public class ChatGUI extends JPanel {
 		chatScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		
 		// message input
-		userMessage = new JTextField(45);
+		userMessage = new JTextField(50);
 		userMessage.setFont(new Font("Consolas", 0, 15));
 		submitMessageBtn = new JButton("Send");
 		Action sendMessageAction = new AbstractAction() {

@@ -1,9 +1,13 @@
 package clientserverchat.server;
 
-public class Main {
+import java.io.IOException;
 
-	public static void main(String[] args) {
-		
+public class Main {
+	
+	static int DEFAULT_PORT = 6969;
+
+	public static void main(String[] args) throws IOException {
+		new Server(DEFAULT_PORT).start();
 	}
 
 }

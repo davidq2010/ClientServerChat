@@ -11,11 +11,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Receive and and response to request from a client
+ */
 public class ClientHandler implements Runnable {
 
 	private Socket clientSocket;
 	
-	public final String END_OF_MESSAGE = "Message end.";
+	public final String END_OF_MESSAGE = "\u0004";
 	
 	private final DateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 	
@@ -83,13 +86,8 @@ public class ClientHandler implements Runnable {
 		}
 		else if (lines[0].equals("POST")) {
 			String sender = lines[1];
-			Date date;
-			try {
-				date = DATE_FORMAT.parse(lines[2]);
-			} catch (ParseException e) {
-				throw new IllegalArgumentException("Invalid request");
-			}
-			String content = lines[3];
+			Date date = new Date(); // date when message is received
+			String content = lines[2];
 			messageHub.addMessage(sender, date, content);
 			return "OK\n" + END_OF_MESSAGE;
 		}

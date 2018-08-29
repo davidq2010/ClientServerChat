@@ -3,6 +3,7 @@ package clientserverchat.client;
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -16,9 +17,10 @@ public class LoginGUI extends JPanel {
 	
 	private JTextField usernameField;
 	
-	public LoginGUI(ActionListener nameSubmitAction) {
+	public LoginGUI(Action nameSubmitAction) {
 		usernameLabel = new JLabel("Name");
 		usernameField = new JTextField(16);
+		usernameField.addActionListener(nameSubmitAction);
 		submitButton = new JButton("Submit");
 		submitButton.addActionListener(nameSubmitAction);
 		

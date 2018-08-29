@@ -19,7 +19,7 @@ public class ClientHandler implements Runnable {
 	private Socket clientSocket;	
 	private final DateFormat DATE_FORMAT = new SimpleDateFormat(
 			"dd-MM-yyyy HH:mm:ss");	
-	public final String END_OF_MESSAGE = "\u0004";
+	public final static String END_OF_MESSAGE = "\u0004";
 	
 	private MessageHub messageHub;
 

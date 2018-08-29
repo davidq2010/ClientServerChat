@@ -1,6 +1,7 @@
 package clientserverchat.client;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -51,8 +52,9 @@ public class ChatGUI extends JPanel {
 		 *  init components
 		 */
 		// messages display
-		chatArea = new JTextArea(20, 100);
+		chatArea = new JTextArea(30, 50);
 		chatArea.setLineWrap(true);
+		chatArea.setFont(new Font("Consolas", 0, 15));
 		chatArea.setEditable(false);
 //		DefaultCaret caret = (DefaultCaret)chatArea.getCaret();
 //		caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
@@ -62,7 +64,8 @@ public class ChatGUI extends JPanel {
 		chatScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		
 		// message input
-		userMessage = new JTextField(80);
+		userMessage = new JTextField(45);
+		userMessage.setFont(new Font("Consolas", 0, 15));
 		submitMessageBtn = new JButton("Send");
 		Action sendMessageAction = new AbstractAction() {
 			@Override
@@ -116,10 +119,13 @@ public class ChatGUI extends JPanel {
 					e.printStackTrace();
 					return;
 				}
-				lastMessageID = messages.get(messages.size()-1).getId();
+				if (messages.size() != 0)
+					lastMessageID = messages.get(messages.size()-1).getId();
 				for (Message m : messages) {
-					sb.append(m.getId()).append(" - ").append(DATE_FORMAT.format(m.getDate()))
-					.append(" ").append(m.getSender()).append("\n").append(m.getContent()).append("\n");
+					sb.append(DATE_FORMAT.format(m.getDate()))
+					  .append("  ")
+					  .append(m.getSender()).append(":\n")
+					  .append(m.getContent()).append("\n");
 				}
 				chatArea.append(sb.toString());
 				messageFetcher = null;

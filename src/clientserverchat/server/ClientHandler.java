@@ -106,9 +106,9 @@ public class ClientHandler implements Runnable {
 		
 		StringBuilder responseBuilder = new StringBuilder();
 		for(Message message : messages) {
-			responseBuilder.append(message.getId()).append("\n")
+			responseBuilder
+			.append(DATE_FORMAT.format(message.getDate())).append(" ")
 			.append(message.getSender()).append("\n")
-			.append(DATE_FORMAT.format(message.getDate())).append("\n")
 			.append(message.getContent()).append("\n");
 		}
 		responseBuilder.append(END_OF_MESSAGE);

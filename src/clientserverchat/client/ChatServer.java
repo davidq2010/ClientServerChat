@@ -44,6 +44,7 @@ public class ChatServer {
 		List<Message> messageList = new ArrayList<>();
 
 		String line = in.readLine();
+		System.out.println(line);
 
 		// If response is Error, throw exception
 		if (line.equals("Error")) {
@@ -52,7 +53,7 @@ public class ChatServer {
 			throw new IllegalArgumentException("Invalid ID"); 
 		}
 
-		do {
+		 while(!END_OF_MESSAGE.equals(line)) {
 			// Construct message to add to messageList 
 			int id = Integer.valueOf(line);
 			String sender = in.readLine();
@@ -66,7 +67,7 @@ public class ChatServer {
 			messageList.add(new Message(sender, date, content, id));
 
 			line = in.readLine();
-		} while(!END_OF_MESSAGE.equals(line)); 
+		}
 		
 		return messageList;
 	}

@@ -6,11 +6,13 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Scanner;
 
-import clientserverchat.server.Message;
 import clientserverchat.server.ClientHandler;
+import clientserverchat.server.Message;
 
 public class ServerForClient {
 	
@@ -44,23 +46,44 @@ public class ServerForClient {
 		}	
 	}
 	
-	public String getMessages(int startID, int endID) {
+	public List<Message> getMessages(int startID, int endID) {
 		// Construct GET request and send to ClientHandler
 		writer.println("GET");
 		writer.println(startID);
 		writer.println(endID);
 		writer.println(ClientHandler.END_OF_MESSAGE);
 		
+		List<Message> messageList = new ArrayList<>();
+		
 		try {
-			while(!(reader.readLine().equals(ClientHandler.END_OF_MESSAGE))) {
+			String line = reader.readLine();
+			
+			// Construct message to add to messageList 
+			while(!(line.equals(ClientHandler.END_OF_MESSAGE))) { 
+				int id = Integer.valueOf(line);
 				
+				line = reader.readLine();
+				String sender = line;
+				
+				line = reader.readLine();
+				Date date = ClientHandler.DATE_FORMAT.parse(line);
+				
+				line = reader.readLine();
+				String content = line;
+				
+				messageList.add(new Message(sender, date, content, id));
+					
+				line = reader.readLine();
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		// Send request to ClientHandler
-		return null;
+		return messageList;
 	}
 	
 	public void sendMessage(Message message) {

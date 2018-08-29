@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -17,7 +16,7 @@ import java.util.List;
 public class ClientHandler implements Runnable {
 	
 	private Socket clientSocket;	
-	private final DateFormat DATE_FORMAT = new SimpleDateFormat(
+	public final static DateFormat DATE_FORMAT = new SimpleDateFormat(
 			"dd-MM-yyyy HH:mm:ss");	
 	public final static String END_OF_MESSAGE = "\u0004";
 	

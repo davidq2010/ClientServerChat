@@ -13,13 +13,13 @@ import java.util.List;
 
 public class ClientHandler implements Runnable {
 
-	private Socket clientSocket;
+	public final static String END_OF_MESSAGE = "END_OF_MESSAGE.";
 	
-	public final String END_OF_MESSAGE = "Message end.";
-	
-	private final DateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-	
+	private Socket clientSocket;	
+	private final DateFormat DATE_FORMAT = new SimpleDateFormat(
+			"dd-MM-yyyy HH:mm:ss");	
 	private MessageHub messageHub;
+
 	
 	public ClientHandler(Socket clientSocket, MessageHub messageHub) {
 		this.clientSocket = clientSocket;
@@ -28,7 +28,6 @@ public class ClientHandler implements Runnable {
 	
 	@Override
 	public void run() {
-		
 		try (
 			BufferedReader in = new BufferedReader(
 					new InputStreamReader(clientSocket.getInputStream()));
@@ -42,14 +41,19 @@ public class ClientHandler implements Runnable {
 				 */
 				StringBuilder requestBuilder = new StringBuilder();
 				String line = in.readLine();
-				// empty request
+				
+				// Empty request
 				if (END_OF_MESSAGE.equals(line))
 					continue;
+				
+				// First line: GET or POST
 				requestBuilder.append(line);
 				
-				// remaining lines of the request
-				while (!END_OF_MESSAGE.equals(line))
-					requestBuilder.append("\n").append(line);
+				// Remaining lines of the request
+				while (!END_OF_MESSAGE.equals(line)) {
+					line = in.readLine();
+					requestBuilder.append("\n").append(line);	
+				}
 				String request = requestBuilder.toString();
 				
 				/*
@@ -58,6 +62,7 @@ public class ClientHandler implements Runnable {
 				System.out.println(request);
 				String response;
 				try {
+					// Do something based on whether request is GET or POST
 					response = processRequest(request);
 				} catch (Exception e) {
 					response = "Error\n" + END_OF_MESSAGE;

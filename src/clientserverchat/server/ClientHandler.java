@@ -77,6 +77,9 @@ public class ClientHandler implements Runnable {
 	}
 	
 	private String processRequest(String request) {
+		System.out.println();
+		System.out.println(request);
+		System.out.println();
 		String[] lines = request.split("\n");
 		
 		if (lines[0].equals("GET")) {

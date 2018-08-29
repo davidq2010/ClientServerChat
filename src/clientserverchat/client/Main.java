@@ -5,6 +5,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.UnknownHostException;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -13,8 +15,12 @@ import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 public class Main {
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(() -> new Main().showLoginGUI());
+	private ChatServer server;
+	
+	public static void main(String[] args) throws UnknownHostException, IOException {
+		Main main = new Main();
+		main.server = new ChatServer("172.29.192.110", 6969);
+		SwingUtilities.invokeLater(() -> main.showLoginGUI());
 	}
 	
 	private JFrame frame;
@@ -44,7 +50,7 @@ public class Main {
 		System.out.println(username);
 		frame.getContentPane().removeAll();
 		frame.getContentPane().setLayout(new BorderLayout());
-		chatGUI = new ChatGUI(null, username);
+		chatGUI = new ChatGUI(server, username);
 		frame.getContentPane().add(chatGUI, BorderLayout.CENTER);
 		frame.pack();
 		frame.setLocationRelativeTo(null);

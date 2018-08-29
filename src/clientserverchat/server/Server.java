@@ -17,12 +17,14 @@ public class Server {
 	 * @throws IOException when server cannot start
 	 */
 	public void start() throws IOException {
+		System.out.println("Server starting");
 		try (ServerSocket server = new ServerSocket(port)) {
 			MessageHub messageHub = new MessageHub();
 
 			// Listen for new connection and delegate new client to handler thread
 			while(true) {
 				Socket client = server.accept();
+				System.out.println(System.currentTimeMillis() + ": new client");
 				ClientHandler clientHandler = new ClientHandler(client, messageHub);
 				Thread handlerThread = new Thread(clientHandler);
 				handlerThread.start();

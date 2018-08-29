@@ -2,8 +2,8 @@ package clientserverchat.client;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -17,7 +17,6 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingWorker;
 import javax.swing.Timer;
-import javax.swing.text.DefaultCaret;
 
 
 /**
@@ -33,10 +32,13 @@ public class ChatGUI extends JPanel {
 	private ChatServer  server;
 	private String      username;
 	
+	private int lastMessageID = -1;
+	
 	private SwingWorker<List<Message>, Void> messageFetcher = null;
 	private final int FETCH_TIME_INTERVAL = 1000;
-	private long lastFetchTime = 0;
 	private Timer fetchMessageTimer;
+	
+	private DateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd HH:mm");
 	
 	public ChatGUI(ChatServer server, String username) {
 		this.server = server;
@@ -99,11 +101,9 @@ public class ChatGUI extends JPanel {
 
 			@Override
 			protected List<Message> doInBackground() throws Exception {
-				List<Message> messes = new ArrayList<>();
-				for (int i = 0; i < 10; i++) {
-					messes.add(new Message(username, new Date(), "stuff", i));
-				}
-				return messes;
+				int startID = lastMessageID + 1;
+				int endID   = -1;
+				return server.getMessages(startID, endID);
 			}
 			
 			@Override
@@ -116,8 +116,9 @@ public class ChatGUI extends JPanel {
 					e.printStackTrace();
 					return;
 				}
+				lastMessageID = messages.get(messages.size()-1).getId();
 				for (Message m : messages) {
-					sb.append(m.getId()).append(" - ").append(m.getDate())
+					sb.append(m.getId()).append(" - ").append(DATE_FORMAT.format(m.getDate()))
 					.append(" ").append(m.getSender()).append("\n").append(m.getContent()).append("\n");
 				}
 				chatArea.append(sb.toString());
@@ -127,37 +128,4 @@ public class ChatGUI extends JPanel {
 		};
 		messageFetcher.execute();
 	}
-	
-	/*private void updateMessages() {
-		JScrollBar scrollBar = chatScrollPane.getVerticalScrollBar();
-		if (scrollBar.getValue() == scrollBar.getMinimum())
-			updatePrevMessages();
-	}*/
-	
-/*	private void updatePrevMessages() {
-		System.out.println("Update");
-		if (firstMessageID == 0)
-			return;
-		if (System.currentTimeMillis() - prevMessageLastUpdated < PREV_UPDATE_LIMIT)
-			return;
-		prevMessageLastUpdated = System.currentTimeMillis();
-		int n = 50;
-		firstMessageID -= n;
-		StringBuilder sb = new StringBuilder();
-		for (int i = firstMessageID; i < firstMessageID + n; i++) {
-			sb.append(i).append(": Mock message\n");
-		}
-		String newMessages = sb.toString();
-		System.out.println("Start: " + firstMessageID);
-		int originalPos = chatArea.getCaretPosition();
-		System.out.println("Caret at: " + originalPos);
-		chatArea.insert(newMessages, 0);
-
-		System.out.println("After insert msg: " + chatArea.getCaretPosition());
-		chatArea.setCaretPosition(newMessages.length());
-		
-		System.out.println(newMessages.length());
-		System.out.println("Change pos: " + chatArea.getCaretPosition());
-	}*/
-	
 }

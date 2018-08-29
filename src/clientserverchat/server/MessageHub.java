@@ -24,8 +24,10 @@ public class MessageHub {
 	public synchronized List<Message> getMessages(int startID, int endID) {
 		if (startID < 0)
 			startID += messages.size();
+		if (startID < 0)
+			startID = 0;
 		if (endID < 0)
 			endID += messages.size();
-		return Collections.unmodifiableList(messages.subList(startID, endID));
+		return Collections.unmodifiableList(messages.subList(startID, endID + 1));
 	}
 }

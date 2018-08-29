@@ -58,6 +58,11 @@ public class ServerForClient {
 		try {
 			String line = reader.readLine();
 			
+			// If response is Error, throw exception
+			if (line.equals("Error\n")) {
+				throw new IllegalArgumentException("Invalid request"); 
+			}
+			
 			// Construct message to add to messageList 
 			while(!(line.equals(ClientHandler.END_OF_MESSAGE))) { 
 				int id = Integer.valueOf(line);
@@ -86,8 +91,25 @@ public class ServerForClient {
 		return messageList;
 	}
 	
-	public void sendMessage(Message message) {
-		// Construct POST request
-		// Send request to ClientHandler
+	public boolean sendMessage(String sender, String content) {
+		// Construct POST request and send to ClientHandler
+		writer.println("POST");
+		writer.println(sender);
+		writer.println(content);
+		writer.println(ClientHandler.END_OF_MESSAGE);
+
+		try {
+			String response = reader.readLine();
+			if (response.equals("Error\n")) {
+				return false;
+			}
+			else if (response.equals("OK\n")) {
+				return true;
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
 	}
 }

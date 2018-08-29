@@ -19,11 +19,12 @@ public class Server {
 	 */
 	public void start() throws IOException {
 		ServerSocket server = new ServerSocket(port);
+		MessageHub messageHub = new MessageHub();
 		
 		// Listen for new connection and delegate new client to handler thread
 		while(true) {
 			Socket client = server.accept();
-			ClientHandler clientHandler = new ClientHandler(client);
+			ClientHandler clientHandler = new ClientHandler(client, messageHub);
 			Thread handlerThread = new Thread(clientHandler);
 			handlerThread.start();
 		}

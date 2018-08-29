@@ -1,3 +1,4 @@
+package clientserverchat.client;
 
 public class Client {
 

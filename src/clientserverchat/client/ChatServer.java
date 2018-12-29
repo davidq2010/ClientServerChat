@@ -53,7 +53,7 @@ public class ChatServer {
 			throw new IllegalArgumentException("Invalid ID"); 
 		}
 
-		 while(!END_OF_MESSAGE.equals(line)) {
+		while(!END_OF_MESSAGE.equals(line)) {
 			// Construct message to add to messageList 
 			int id = Integer.valueOf(line);
 			String sender = in.readLine();
